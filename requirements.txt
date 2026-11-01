@@ -1,0 +1,26 @@
+# Install PyTorch FIRST for your platform (see README):
+#   CPU:          pip install torch==2.4.1 torchvision==0.19.1 --index-url https://download.pytorch.org/whl/cpu
+#   NVIDIA CUDA:  pip install torch==2.4.1 torchvision==0.19.1 --index-url https://download.pytorch.org/whl/cu121
+diffusers==0.30.3
+transformers==4.44.2
+accelerate==0.34.2
+peft==0.12.0
+huggingface-hub==0.25.2
+safetensors>=0.4
+gradio==4.44.1
+pydantic==2.10.6   # gradio 4.44 breaks with pydantic>=2.11
+fastapi==0.115.6
+trimesh==5.2.0
+xatlas==0.0.11
+PyMCubes==0.1.6
+fast-simplification==0.2.0
+opencv-python-headless>=4.8,<5
+rembg==2.0.59
+onnxruntime>=1.17
+einops>=0.7
+omegaconf>=2.3
+numpy>=1.26,<2
+pillow>=10,<11
+scipy>=1.10
+# optional, only for tools/render_views.py (multi-view PNG previews)
+playwright>=1.40

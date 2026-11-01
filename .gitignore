@@ -1,0 +1,46 @@
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local model weights / generated assets (large; downloaded by bootstrap)
+weights/
+outputs/
+third_party/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs & OS junk
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Hugging Face / cache leftovers inside the project
+.cache/
+**/.cache/
+
+# Gradio / runtime
+flagged/
+gradio_cached_examples/

@@ -1,0 +1,304 @@
+<title>Sketch2Shape</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Syncopate:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+/* Layout: a blueprint drafting table lit by one warm lamp. The sketch turns into the object on a single stage. */
+:root{
+  color-scheme:dark;
+  --ink:#0a1324;          /* blueprint paper at night */
+  --ink-2:#101c33;
+  --ink-3:#172744;
+  --line:#2a4068;
+  --chalk:#e9eefb;        /* drafting chalk */
+  --mute:#9fb0cf;
+  --lamp:#ffc46b;         /* warm desk lamp */
+  --lamp-ink:#241703;
+  --trace:#6fb7ff;        /* blueprint trace line */
+  --display:"Syncopate","Arial Black",sans-serif;
+  --body:"Sora","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--chalk);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 520px at 72% -8%,rgba(255,196,107,.16),transparent 70%),
+  linear-gradient(var(--ink-2) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,var(--ink-2) 1px,transparent 1px) 0 0/44px 44px}
+.wrap{max-width:1240px;margin-inline:auto}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2{text-wrap:balance}
+.label{font-family:var(--mono);font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--trace)}
+
+/* nav */
+nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:22px;flex-wrap:wrap}
+.logo{font-family:var(--display);font-size:.95rem;letter-spacing:.06em;text-decoration:none}
+.logo b{color:var(--lamp);font-weight:700}
+.links{display:flex;gap:26px;align-items:center;font-size:.92rem;color:var(--mute);flex-wrap:wrap}
+.links a{text-decoration:none}
+.links a:hover{color:var(--chalk)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;font:600 1rem var(--body);
+  padding:15px 26px;border-radius:999px;text-decoration:none;background:var(--lamp);color:var(--lamp-ink);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 34px rgba(255,196,107,.35)}
+.btn.ghost{background:transparent;color:var(--chalk);box-shadow:inset 0 0 0 1px var(--line)}
+.btn:disabled{opacity:.55;cursor:default;transform:none;box-shadow:none}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+
+/* hero */
+.hero{display:grid;gap:30px;padding-block:26px 56px}
+.hero-copy{display:grid;gap:18px;justify-items:center;text-align:center}
+h1{font-size:clamp(2.5rem,6.6vw,5.4rem);line-height:1.04;font-weight:700;letter-spacing:-.03em}
+h1 em{font-style:normal;color:var(--lamp)}
+.lede{max-width:44ch;color:var(--mute);font-size:1.12rem}
+.cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.stage{position:relative;aspect-ratio:16/8;max-height:620px;width:100%;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,var(--ink-3),var(--ink));
+  box-shadow:0 40px 110px rgba(0,0,0,.55),inset 0 0 0 1px var(--line)}
+.stage model-viewer{position:absolute;inset:0;width:100%;height:100%;background:transparent;--poster-color:transparent}
+.sketch-side{position:absolute;inset:0;background:var(--ink-2);clip-path:inset(0 calc(100% - var(--split,50%)) 0 0);display:grid;place-items:center}
+.sketch-side::before{content:"";position:absolute;inset:0;background:linear-gradient(var(--line) 1px,transparent 1px) 0 0/30px 30px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/30px 30px;opacity:.38}
+.sketch-side img{position:relative;height:100%;filter:invert(1);mix-blend-mode:screen}
+.seam{position:absolute;top:0;bottom:0;left:var(--split,50%);width:2px;background:var(--lamp);box-shadow:0 0 26px 5px rgba(255,196,107,.65);pointer-events:none}
+.seam i{position:absolute;top:50%;left:50%;width:50px;height:50px;margin:-25px;border-radius:50%;background:var(--lamp);color:var(--lamp-ink);display:grid;place-items:center;font:600 1.1rem var(--mono);font-style:normal}
+.stage .tag{position:absolute;top:16px;padding:6px 14px;border-radius:999px;background:rgba(10,19,36,.72);font-family:var(--mono);font-size:.8rem;letter-spacing:.08em}
+.tag.l{left:16px}.tag.r{right:16px;color:var(--lamp)}
+.stage input[type=range]{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize}
+
+section{padding-block:56px}
+.head{display:grid;gap:8px;margin-bottom:28px}
+h2{font-size:clamp(1.8rem,3.6vw,2.8rem);line-height:1.15;letter-spacing:-.02em;font-weight:600}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.step{display:grid;gap:12px;align-content:start;min-width:0}
+.step figure{margin:0;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line)}
+.step img{width:100%;height:100%;object-fit:cover;display:block}
+.step .sk{filter:invert(1);mix-blend-mode:screen}
+.step model-viewer{width:100%;height:100%;background:transparent}
+.step h3{font-size:1.15rem;font-weight:600}
+.step p{color:var(--mute);font-size:.95rem}
+
+/* studio */
+.studio{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr) minmax(0,250px);gap:16px;align-items:stretch}
+.panel{background:rgba(16,28,51,.88);border-radius:16px;padding:18px;box-shadow:inset 0 0 0 1px var(--line);display:grid;gap:14px;align-content:start;min-width:0}
+.panel h3{font-size:1rem;font-weight:600}
+#pad{width:100%;aspect-ratio:1;background:#f5f7fc;border-radius:10px;display:block;cursor:crosshair;touch-action:none}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.link{background:none;border:0;color:var(--trace);font:500 .85rem var(--body);cursor:pointer;padding:0}
+.field{display:grid;gap:6px;font-size:.88rem;color:var(--mute)}
+.field input{width:100%;padding:11px 13px;border-radius:9px;border:1px solid var(--line);background:var(--ink);color:var(--chalk);font:400 .95rem var(--body)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.seg button{padding:9px 6px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--mute);font:500 .86rem var(--body);cursor:pointer;display:grid;gap:1px}
+.seg small{font:400 .72rem var(--mono)}
+.seg button[aria-pressed=true]{background:var(--ink-3);border-color:var(--lamp);color:var(--chalk)}
+.panel .btn{width:100%}
+.view{position:relative;border-radius:16px;overflow:hidden;background:radial-gradient(70% 70% at 50% 40%,var(--ink-3),var(--ink));box-shadow:inset 0 0 0 1px var(--line);min-height:520px}
+.view model-viewer{position:absolute;inset:0;width:100%;height:100%;background:transparent}
+.hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:6px 14px;border-radius:999px;background:rgba(10,19,36,.72);font-size:.82rem;color:var(--mute);white-space:nowrap}
+.progress{list-style:none;margin:0;padding:0;display:grid;gap:11px;font-size:.9rem}
+.progress li{display:flex;gap:10px;align-items:center;color:var(--mute)}
+.progress li::before{content:"";flex:none;width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--line)}
+.progress li.on{color:var(--chalk)}
+.progress li.on::before{box-shadow:inset 0 0 0 2px var(--lamp);animation:pulse 1s infinite}
+.progress li.ok{color:var(--chalk)}
+.progress li.ok::before{background:var(--lamp);box-shadow:none}
+@keyframes pulse{50%{opacity:.35}}
+.file{display:flex;justify-content:space-between;gap:10px;padding:11px 13px;border-radius:9px;box-shadow:inset 0 0 0 1px var(--line);font:500 .86rem var(--mono)}
+.file span{color:var(--mute);font-weight:400}
+.note{font-size:.82rem;color:var(--mute);line-height:1.5}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{display:grid;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer;font:inherit;gap:12px}
+.card span.pic{position:relative;display:block;aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--ink-2);box-shadow:inset 0 0 0 1px var(--line)}
+.card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.card:hover img{transform:scale(1.05)}
+.card b{font-weight:600;display:block}
+.card em{font-style:normal;color:var(--mute);font-size:.9rem}
+
+footer{padding-block:34px 44px;color:var(--mute);font-size:.9rem;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line)}
+
+@media(max-width:980px){
+  .studio{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .view{grid-column:1/-1;grid-row:1;min-height:380px}
+}
+@media(max-width:640px){
+  .steps,.gal,.studio{grid-template-columns:minmax(0,1fr)}
+  .stage{aspect-ratio:4/3}
+  .links a:not(.keep){display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+  <nav aria-label="Main">
+    <a class="logo" href="#top">SKETCH<b>2</b>SHAPE</a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#gallery">Gallery</a>
+      <a class="keep" href="#studio">Open the studio</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <h1>Draw it flat.<br><em>Get it in 3D.</em></h1>
+      <p class="lede">Sketch any object. Sketch2Shape turns your lines into a textured 3D model you can spin and download.</p>
+      <div class="cta">
+        <a class="btn" href="#studio">Turn my sketch into 3D</a>
+        <a class="btn ghost" href="#how">See how it works</a>
+      </div>
+    </div>
+    <div class="stage" id="stage">
+      <model-viewer src="assets/car.glb" camera-orbit="0deg 82deg auto" exposure="1.1" shadow-intensity=".9" environment-image="neutral" interaction-prompt="none" disable-zoom alt="3D model of a red car"></model-viewer>
+      <div class="sketch-side"><img src="assets/car_sketch.png" alt="Line drawing of the same car"></div>
+      <div class="seam"><i aria-hidden="true">↔</i></div>
+      <span class="tag l">YOUR SKETCH</span><span class="tag r">3D MODEL</span>
+      <input id="split" type="range" min="0" max="100" value="50" aria-label="Drag to compare the sketch and the 3D model">
+    </div>
+  </header>
+
+  <section id="how">
+    <div class="head">
+      <span class="label">How it works</span>
+      <h2>Three steps from pencil to 3D</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <figure><img class="sk" id="s1" src="assets/car_sketch.png" alt="The sketch"></figure>
+        <h3>1. Draw or upload</h3>
+        <p>Rough lines are fine. Add a few words if you want a colour or material.</p>
+      </div>
+      <div class="step">
+        <figure><img id="s2" src="assets/car_image.jpg" alt="AI image generated from the sketch"></figure>
+        <h3>2. AI fills in the object</h3>
+        <p>Your outline becomes a full picture with colour, light and material.</p>
+      </div>
+      <div class="step">
+        <figure><model-viewer id="s3" src="assets/car.glb" camera-orbit="35deg 75deg auto" exposure="1.1" auto-rotate rotation-per-second="14deg" environment-image="neutral" interaction-prompt="none" alt="Finished 3D model"></model-viewer></figure>
+        <h3>3. Get your 3D model</h3>
+        <p>The hidden sides are worked out for you. Spin it, then download it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="studio">
+    <div class="head">
+      <span class="label">Studio</span>
+      <h2>Your sketch on the left. Your model on the right.</h2>
+    </div>
+    <div class="studio">
+      <div class="panel">
+        <div class="row"><h3>1. Your sketch</h3><button class="link" id="clear" type="button">Clear</button></div>
+        <canvas id="pad" width="512" height="512" aria-label="Drawing canvas"></canvas>
+        <button class="link" type="button" id="upload" style="justify-self:start">Or upload an image</button>
+        <label class="field">2. Describe it (optional)
+          <input id="prompt" type="text" placeholder="Leave empty and we will guess" value="red sports car">
+        </label>
+        <div class="field">3. Choose quality
+          <div class="seg">
+            <button type="button" id="hq" aria-pressed="true">Best quality<small>about 5 min</small></button>
+            <button type="button" id="fast" aria-pressed="false">Fast<small>1 to 2 min</small></button>
+          </div>
+        </div>
+        <button class="btn" id="go" type="button">Generate 3D model</button>
+      </div>
+      <div class="view">
+        <model-viewer id="main" src="assets/car.glb" camera-orbit="35deg 75deg auto" camera-controls exposure="1.1" shadow-intensity=".9" environment-image="neutral" interaction-prompt="none" alt="3D preview"></model-viewer>
+        <span class="hint">Drag to spin. Scroll to zoom.</span>
+      </div>
+      <div class="panel">
+        <h3>Progress</h3>
+        <ol class="progress" id="stages">
+          <li class="ok">Reading your sketch</li>
+          <li class="ok">Creating the image</li>
+          <li class="ok">Isolating the object</li>
+          <li class="ok">Building the 3D shape</li>
+          <li class="ok">Painting the texture</li>
+        </ol>
+        <h3>Download</h3>
+        <div class="file">model.glb <span>3D model</span></div>
+        <div class="file">model_obj.zip <span>OBJ + texture</span></div>
+        <p class="note">Layout preview: Generate replays a saved result so you can feel the flow. Downloads connect in the full build.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery">
+    <div class="head">
+      <span class="label">Gallery</span>
+      <h2>Made from single sketches</h2>
+    </div>
+    <div class="gal">
+      <button class="card" data-m="car" type="button"><span class="pic"><img src="assets/car_image.jpg" alt=""></span><b>Sports car</b><em>Open in the studio</em></button>
+      <button class="card" data-m="chair" type="button"><span class="pic"><img src="assets/chair_image.jpg" alt=""></span><b>Wooden chair</b><em>Open in the studio</em></button>
+      <button class="card" data-m="flower" type="button"><span class="pic"><img src="assets/flower_image.jpg" alt=""></span><b>Pink flower</b><em>Open in the studio</em></button>
+    </div>
+  </section>
+
+  <footer><span>Sketch2Shape</span><span>Runs on your own computer, on a 4 GB laptop GPU.</span></footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const stage=$('stage'),split=$('split');
+const setSplit=v=>stage.style.setProperty('--split',v+'%');
+split.addEventListener('input',()=>{touched=true;setSplit(split.value)});
+let touched=false;
+if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const t0=performance.now();
+  (function sweep(t){
+    if(touched)return;
+    const v=50+38*Math.sin((t-t0)/2300);
+    split.value=v;setSplit(v);requestAnimationFrame(sweep);
+  })(t0);
+}
+
+/* drawing pad */
+const pad=$('pad'),c=pad.getContext('2d');
+function paper(){c.fillStyle='#f5f7fc';c.fillRect(0,0,512,512)}
+paper();
+const img=new Image();img.onload=()=>c.drawImage(img,0,0,512,512);img.src='assets/car_sketch.png';
+let down=false;
+const at=e=>{const r=pad.getBoundingClientRect();return[(e.clientX-r.left)*512/r.width,(e.clientY-r.top)*512/r.height]};
+pad.addEventListener('pointerdown',e=>{down=true;pad.setPointerCapture(e.pointerId);c.beginPath();c.moveTo(...at(e))});
+pad.addEventListener('pointermove',e=>{if(!down)return;c.lineWidth=5;c.lineCap='round';c.strokeStyle='#10182a';c.lineTo(...at(e));c.stroke()});
+pad.addEventListener('pointerup',()=>down=false);
+$('clear').addEventListener('click',paper);
+
+/* quality */
+['hq','fast'].forEach(id=>$(id).addEventListener('click',()=>{
+  $('hq').setAttribute('aria-pressed',id==='hq');$('fast').setAttribute('aria-pressed',id==='fast')}));
+
+/* samples */
+const S={car:{p:'red sports car',o:'35deg 75deg auto'},chair:{p:'wooden chair',o:'30deg 75deg auto'},flower:{p:'pink flower',o:'0deg 85deg auto'}};
+let cur='car';
+function pick(name){
+  cur=name;
+  $('main').src=$('s3').src=`assets/${name}.glb`;
+  $('main').cameraOrbit=$('s3').cameraOrbit=S[name].o;
+  $('s1').src=`assets/${name}_sketch.png`;$('s2').src=`assets/${name}_image.jpg`;
+  $('prompt').value=S[name].p;
+  paper();img.src=`assets/${name}_sketch.png`;
+}
+document.querySelectorAll('.card').forEach(b=>b.addEventListener('click',()=>{pick(b.dataset.m);$('studio').scrollIntoView()}));
+
+/* replay of a saved run */
+$('go').addEventListener('click',()=>{
+  const items=[...$('stages').children],btn=$('go');
+  btn.disabled=true;btn.textContent='Working...';
+  items.forEach(li=>li.className='');$('main').style.opacity=.15;
+  let i=0;
+  (function next(){
+    if(i>0)items[i-1].className='ok';
+    if(i===items.length){btn.disabled=false;btn.textContent='Generate 3D model';$('main').style.opacity=1;return}
+    items[i++].className='on';setTimeout(next,1100);
+  })();
+});
+$('upload').addEventListener('click',()=>{const f=document.createElement('input');f.type='file';f.accept='image/*';
+  f.onchange=()=>{const u=URL.createObjectURL(f.files[0]);paper();img.src=u};f.click()});
+</script>

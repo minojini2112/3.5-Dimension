@@ -1,0 +1,12 @@
+dl_depth-anything-v2-small.log:[setup] depth-anything-v2-small ready
+dl_depth-anything-v2-small.log:[retry] depth-anything-v2-small done
+dl_lcm-lora-sdv1-5.log:[setup] lcm-lora-sdv1-5 ready
+dl_lcm-lora-sdv1-5.log:[retry] lcm-lora-sdv1-5 done
+dl_clip-vit-b-32.log:[setup] clip-vit-b-32 ready
+dl_clip-vit-b-32.log:[retry] clip-vit-b-32 done
+dl_TripoSR.log:[setup] TripoSR ready
+dl_TripoSR.log:[retry] TripoSR done
+dl_controlnet-scribble.log:[setup] controlnet-scribble ready
+dl_controlnet-scribble.log:[retry] controlnet-scribble done
+dl_dreamshaper-8.log:[setup] dreamshaper-8 ready
+dl_dreamshaper-8.log:[retry] dreamshaper-8 done
